@@ -9,18 +9,16 @@
 #
 set -o posix
 (return 0 &>/dev/null) || { printf "This file should be sourced.\n> source $0\n"; exit 1; }
-
-export PJM_VER="PJM 0.1 INDev"
+PJMDIR=$(dirname "${BASH_SOURCE[0]}")
+export PJM_VER="PJM 0.2 INDev"
 _PJM_confirm () {
     echo -n "Say 'yes' to confirm >) "
     read _P_CF; [ $_P_CF == "yes" ];
     return $?
 }
 # settings:
-export PROJECTS_DIR=$HOME/projects
-_enable_bash_autocomp=true
-
-$_enable_bash_autocomp && source "$(dirname "${BASH_SOURCE[0]}")/pjm_bash_autocomp.sh"
+source "$PJMDIR/settings.sh"
+$_enable_bash_autocomp && source "$PJMDIR/pjm_bash_autocomp.sh"
 [ -e $PROJECTS_DIR ] && ! [ -d $PROJECTS_DIR ] && {
     echo "$PROJECTS_DIR isn't a directory. Trying to delete it."
     _PJM_confirm && {
@@ -30,25 +28,26 @@ $_enable_bash_autocomp && source "$(dirname "${BASH_SOURCE[0]}")/pjm_bash_autoco
     } || echo "Aborting."; 
 }
 
-pjm_new () {
+_pjm_new () {
     local proj=${PROJECTS_DIR}/$1;
     [ -z $1 ] && { echo "<name> is an empty string." > 2; return 1; }
     [ -e $proj ] && { echo "Project $1 already exists."; return 2; }
-    mkdir $proj;
-    cd $proj;
-    touch LICENSE;
-    return 0;
+    mkdir $proj
+    cd $proj
+    touch LICENSE
+    $_enable_auto_git_init && git init -q -b main $proj
+    return 0
 }
-pjm_del () {
-    local proj=${PROJECTS_DIR}/$1;
+_pjm_del () {
+    local proj=${PROJECTS_DIR}/$1
     [ -z $1 ] && { echo '<name> is an empty string.' > 2; return 1; }
     ! [ -e $proj ] && { echo "Project $1 doesnt exist."; return 2; }
-    echo "Deleting project $1";
+    echo "Deleting project $1"
     _PJM_confirm && rm -rv $proj || echo "Aborting.";
     return 0
 }
 
-pjm_cd () {
+_pjm_cd () {
     local proj=${PROJECTS_DIR}/$1;
     [ -d $proj ] && cd $proj || { 
         [ -e $proj ] && { 
@@ -65,13 +64,13 @@ pjm () {
     local _P1=${1:1};
     case $_P0 in
         /)
-            pjm_cd $_P1; return $?
+            _pjm_cd $_P1; return $?
             ;;
         -)
-            pjm_del $_P1; return $?
+            _pjm_del $_P1; return $?
             ;;
         +)
-            pjm_new $_P1; return $?
+            _pjm_new $_P1; return $?
             ;;
         h)
             printf \
