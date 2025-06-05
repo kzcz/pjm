@@ -16,16 +16,12 @@ _pjm_completion() {
             local projects=$(cd "${PROJECTS_DIR}" && ls -d */ 2>/dev/null | sed 's#/##')
             COMPREPLY=($(compgen -W "${projects}" -P "-" -- "${cur#-}"))
             ;;
-        h)
-            COMPREPLY=('h')
-            compopt -o nospace
-            ;;
-        +)
-            COMPREPLY=('+')
+        h|l|+)
+            COMPREPLY=(${cur})
             compopt -o nospace
             ;;
         *)
-            COMPREPLY=($(compgen -W "h + / -" -- "${cur}"))
+            COMPREPLY=($(compgen -W "h l + / -" -- "${cur}"))
             ;;
     esac
 }
