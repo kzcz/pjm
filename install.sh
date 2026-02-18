@@ -17,3 +17,5 @@ select A in Yes No; do case $A in
 esac; done
 echo -e "export PROJECTS_DIR=$PROJD\nexport _enable_bash_autocomp=$BAC\nexport _enable_auto_git_init=$AGI\n" > $LOCATION/settings.sh
 chmod 644 $LOCATION/settings.sh
+source ./pjm.sh
+source $LOCATION/settings.sh

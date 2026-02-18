@@ -24,6 +24,7 @@ _PJM_creation_date () {
     date -d "$ts" +"%H:%M:%S (%d %B %Y)"
 }
 $_enable_bash_autocomp && source "$PJMDIR/pjm_bash_autocomp.sh"
+! [ -e $PROJECTS_DIR ] && mkdir $PROJECTS_DIR
 [ -e $PROJECTS_DIR ] && ! [ -d $PROJECTS_DIR ] && {
     echo "$PROJECTS_DIR isn't a directory. Trying to delete it."
     _PJM_confirm && {
@@ -89,21 +90,27 @@ _pjm_list () {
     printf '%s\n' "${out[@]}"
 }
 pjm () {
-    [ -z "$*" ] || [ "$#" -ge 2 ] && { echo "Usage: pjm [Prefix][args]"; return 1; }
+    [ -z "$*" ] && { echo "Usage: pjm [Prefix][args]"; return 1; }
     local _P0=${1:0:1};
     local _P1=${1:1};
+    set -- "${@:2}"
+    a=false
+    (( $# > 1 )) && a=true
     case $_P0 in
         /)
+            $a && echo "/ only takes one argument." && return 1;
             _pjm_cd $_P1; return $?
             ;;
         -)
+            $a && echo "- only takes one argument." && return 1;
             _pjm_del $_P1; return $?
             ;;
         +)
+            $a && echo "+ only takes one argument." && return 1;
             _pjm_new $_P1; return $?
             ;;
         l)
-            _pjm_list $_P1; return $?
+            _pjm_list $_P1 $@; return $?
             ;;
         h)
             printf \
@@ -114,7 +121,8 @@ pjm () {
 "    -<name>        = deletes a project.\n"\
 "    l[name[s ...]] = list select projects, if none is selected, list them all.\n"\
 "    l<regex>       = find projects using regex, and list them.\n"\
-"    h       = prints this message.\n"
+"    h              = prints this message.\n"\
+"\nPROJECTS_DIR=${PROJECTS_DIR} PJMDIR=${PJMDIR}\n"
             return 0
             ;;
         *)
