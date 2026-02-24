@@ -24,39 +24,39 @@ _PJM_creation_date () {
     date -d "$ts" +"%H:%M:%S (%d %B %Y)"
 }
 $_enable_comp && source "$PJMDIR/pjm_comp.bash"
-! [ -e $PROJECTS_DIR ] && mkdir $PROJECTS_DIR
-[ -e $PROJECTS_DIR ] && ! [ -d $PROJECTS_DIR ] && {
+! [ -e "$PROJECTS_DIR" ] && mkdir "$PROJECTS_DIR"
+[ -e "$PROJECTS_DIR" ] && ! [ -d "$PROJECTS_DIR" ] && {
     echo "$PROJECTS_DIR isn't a directory. Trying to delete it."
     _PJM_confirm && {
-        rm -v $PROJECTS_DIR
+        rm -v "$PROJECTS_DIR"
         echo "Making new $PROJECTS_DIR"
-        mkdir $PROJECTS_DIR
+        mkdir "$PROJECTS_DIR"
     } || echo "Aborting."; 
 }
 
 _pjm_new () {
-    local proj=${PROJECTS_DIR}/$1;
+    local proj="${PROJECTS_DIR}/$1";
     [ -z $1 ] && { echo "<name> is an empty string." >&2; return 1; }
-    [ -e $proj ] && { echo "Project $1 already exists."; return 2; }
-    mkdir $proj
-    cd $proj
+    [ -e "$proj" ] && { echo "Project $1 already exists."; return 2; }
+    mkdir "$proj"
+    cd "$proj"
     touch LICENSE
-    $_enable_auto_git_init && git init -q -b main $proj
+    $_enable_auto_git_init && git init -q -b main "$proj"
     return 0
 }
 _pjm_del () {
-    local proj=${PROJECTS_DIR}/$1
+    local proj="${PROJECTS_DIR}/$1"
     [ -z $1 ] && { echo '<name> is an empty string.' >&2; return 1; }
-    ! [ -e $proj ] && { echo "Project $1 doesnt exist."; return 2; }
+    ! [ -e "$proj" ] && { echo "Project $1 doesnt exist."; return 2; }
     echo "Deleting project $1"
-    _PJM_confirm && rm -rv $proj || echo "Aborting.";
+    _PJM_confirm && rm -rv "$proj" || echo "Aborting.";
     return 0
 }
 
 _pjm_cd () {
-    local proj=${PROJECTS_DIR}/$1;
-    [ -d $proj ] && cd $proj || { 
-        [ -e $proj ] && { 
+    local proj="${PROJECTS_DIR}/$1";
+    [ -d "$proj" ] && cd "$proj" || { 
+        [ -e "$proj" ] && { 
             echo "$proj is not a directory."; return 1;
         } || { 
             echo "Project $proj doesnt exist."; return 2;
@@ -69,7 +69,7 @@ _pjm_list () {
     local list=();
     (( $# > 1 )) && _list="$@" || {
         local e="";
-        _list="$(ls $PROJECTS_DIR)";
+        _list="$(ls "$PROJECTS_DIR")";
         [ -n "$1" ] && {
             { [ -e "$PROJECTS_DIR/$1" ] && [ "$1" != "." ] && [ "$1" != ".." ]; } && e="e";
             { [ -z "$1" ] || [ -z "$e" ]; } && { _list="$(grep -iEe "$1" <<< "$_list")"; [ -n "$_list" ] && echo "No exact match, using grep." || { echo "No match found."; return 1; }; };

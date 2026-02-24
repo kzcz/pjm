@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -eu
-local PJM_FILE PS3 LOCATION EXT PROJD COMP AGI OUTF
 die() { echo "$1"; exit "${2:-1}"; }
 [[ -z "$BASH_VERSION$ZSH_VERSION" ]] && die "Unsupported shell. Try again with zsh or bash.";
 : # "ask <prompt> <default value> <where to store the result>"
-[[ -n "$BASH_VERSION"]] && { EXT="sh"; OUTF="$HOME/.bashrc"; } || { EXT="zsh"; OUTF="$HOME/.zshrc"; };
+[[ -n "$BASH_VERSION" ]] && { EXT="sh"; OUTF="$HOME/.bashrc"; } || { EXT="zsh"; OUTF="$HOME/.zshrc"; };
 PJM_FILE="pjm.$EXT"
 ask() {
     if [[ -n "$BASH_VERSION" ]]; then
