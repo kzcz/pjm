@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eu
+set -e
 die() { echo "$1"; exit "${2:-1}"; }
 [[ -z "$BASH_VERSION$ZSH_VERSION" ]] && die "Unsupported shell. Try again with zsh or bash.";
 : # "ask <prompt> <default value> <where to store the result>"

@@ -12,7 +12,7 @@
 }
 zmodload zsh/stat
 PJMDIR="${${(%):-%x}:A:h}"
-export PJM_VER="PJM 0.2.1 INDev (ZSH)"
+export PJM_VER="PJM 0.3 INDev (ZSH)"
 _PJM_confirm() {
     read "_P_CF?Say 'yes' to confirm >)"
     [ "$_P_CF" = "yes" ]

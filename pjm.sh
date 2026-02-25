@@ -10,7 +10,7 @@
 set -o posix
 (return 0 &>/dev/null) || { printf "This file should be sourced.\n> source $0\n"; exit 1; }
 PJMDIR=$(dirname "${BASH_SOURCE[0]}")
-export PJM_VER="PJM 0.2.1 INDev"
+export PJM_VER="PJM 0.3 INDev"
 _PJM_confirm () {
     echo -n "Say 'yes' to confirm >) "
     read _P_CF; [ $_P_CF = "yes" ];
