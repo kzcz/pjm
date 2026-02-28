@@ -23,7 +23,7 @@ _PJM_creation_date () {
     ts=${birth/-/}; ts=${ts:-$mod}; ts=${ts%%.*;}
     date -d "$ts" +"%H:%M:%S (%d %B %Y)"
 }
-$_enable_comp && source "$PJMDIR/pjm_comp.bash"
+$_enable_comp && source "$PJMDIR/pjm_comp.sh"
 ! [ -e "$PROJECTS_DIR" ] && mkdir "$PROJECTS_DIR"
 [ -e "$PROJECTS_DIR" ] && ! [ -d "$PROJECTS_DIR" ] && {
     echo "$PROJECTS_DIR isn't a directory. Trying to delete it."
