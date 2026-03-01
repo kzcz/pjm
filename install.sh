@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env -S ${SHELL}
 set -e
 die() { echo "$1"; exit "${2:-1}"; }
 [[ -z "$BASH_VERSION$ZSH_VERSION" ]] && die "Unsupported shell. Try again with zsh or bash.";
@@ -32,5 +32,3 @@ yno COMP "Enable autocompletion? "
 yno AGI "Enable automatic 'git init'? "
 echo -e "export PROJECTS_DIR=\"$PROJD\"\nexport _enable_comp=\"$COMP\"\nexport _enable_auto_git_init=\"$AGI\"\n" > $LOCATION/settings.sh
 chmod 644 $LOCATION/settings.sh
-source "$LOCATION/$PJM_FILE"
-source $LOCATION/settings.sh
