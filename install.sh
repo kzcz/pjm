@@ -32,5 +32,5 @@ yno COMP "Enable autocompletion? "
 yno AGI "Enable automatic 'git init'? "
 echo -e "export PROJECTS_DIR=\"$PROJD\"\nexport _enable_comp=\"$COMP\"\nexport _enable_auto_git_init=\"$AGI\"\n" > $LOCATION/settings.sh
 chmod 644 $LOCATION/settings.sh
-source "./$PJM_FILE"
+source "$LOCATION/$PJM_FILE"
 source $LOCATION/settings.sh
